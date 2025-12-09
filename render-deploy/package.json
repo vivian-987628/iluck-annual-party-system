@@ -1,20 +1,27 @@
 {
   "name": "iluck-api",
   "version": "1.0.0",
-  "description": "Online lottery API server",
+  "description": "iLuck年会系统后端API - Render部署版",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
-  },
-  "keywords": ["api", "lottery"],
-  "author": "",
-  "license": "ISC",
-  "engines": {
-    "node": ">=14.0.0"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "cors": "^2.8.5"
-  }
+    "socket.io": "^4.7.2",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5",
+    "uuid": "^9.0.0",
+    "moment": "^2.29.4",
+    "sqlite3": "^5.1.6"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "repository": {
+    "url": "https://github.com/vivian-987628/iluck-annual-party-system"
+  },
+  "license": "MIT"
 }
-
