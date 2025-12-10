@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iLuck年会系统 - 大屏幕</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1 class="title">iLuck 2024 年会盛典</h1>
+            <div class="datetime" id="datetime"></div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main">
+            <!-- 签到展示区 -->
+            <section class="checkin-section" id="checkinSection">
+                <h2 class="section-title">实时签到</h2>
+                <div class="checkin-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCount">0</span>
+                        <span class="stat-label">总人数</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="checkedInCount">0</span>
+                        <span class="stat-label">已签到</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="checkinRate">0%</span>
+                        <span class="stat-label">签到率</span>
+                    </div>
+                </div>
+                
+                <div class="checkin-wall" id="checkinWall">
+                    <!-- 签到头像将动态显示在这里 -->
+                </div>
+            </section>
+
+            <!-- 抽奖展示区 -->
+            <section class="lottery-section" id="lotterySection" style="display: none;">
+                <h2 class="section-title">幸运抽奖</h2>
+                <div class="lottery-container">
+                    <div class="lottery-title" id="lotteryTitle">三等奖</div>
+                    <div class="lottery-animation" id="lotteryAnimation">
+                        <div class="lottery-canvas" id="lotteryCanvas">
+                            <!-- 抽奖动画将在这里显示 -->
+                        </div>
+                    </div>
+                    <div class="lottery-result" id="lotteryResult" style="display: none;">
+                        <div class="winner-avatar" id="winnerAvatar"></div>
+                        <div class="winner-info">
+                            <div class="winner-name" id="winnerName"></div>
+                            <div class="winner-dept" id="winnerDept"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 游戏展示区 -->
+            <section class="game-section" id="gameSection" style="display: none;">
+                <h2 class="section-title">摇一摇竞技</h2>
+                <div class="game-container">
+                    <div class="game-leaderboard" id="gameLeaderboard">
+                        <!-- 实时排行榜将在这里显示 -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <div class="company-info">iLuck 智能年会互动系统</div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-section">
+    <view class="user-info" wx:if="{{userInfo}}">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <view class="nickname">{{userInfo.nickName}}</view>
+        <view class="user-status">
+          <text class="status-dot {{hasCheckin ? 'checked' : ''}}"></text>
+          <text class="status-text">{{hasCheckin ? '已签到' : '未签到'}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="login-prompt" wx:else bindtap="getUserProfile">
+      <button class="login-btn">点击登录</button>
+    </view>
+  </view>
+
+  <!-- 签到信息 -->
+  <view class="info-section" wx:if="{{hasCheckin && checkinData}}">
+    <view class="section-title">签到信息</view>
+    <view class="info-card">
+      <view class="info-item">
+        <text class="info-label">姓名：</text>
+        <text class="info-value">{{checkinData.name}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">部门：</text>
+        <text class="info-value">{{checkinData.department}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">签到时间：</text>
+        <text class="info-value">{{checkinData.checkinTime}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 游戏记录 -->
+  <view class="info-section" wx:if="{{gameRecords.length > 0}}">
+    <view class="section-title">游戏记录</view>
+    <view class="record-card">
+      <view class="record-item" wx:for="{{gameRecords}}" wx:key="time">
+        <view class="record-info">
+          <view class="record-type">{{item.gameType}}</view>
+          <view class="record-time">{{item.time}}</view>
+        </view>
+        <view class="record-result">
+          <view class="record-score">{{item.score}}分</view>
+          <view class="record-rank">第{{item.rank}}名</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 中奖记录 -->
+  <view class="info-section" wx:if="{{lotteryHistory.length > 0}}">
+    <view class="section-title">中奖记录</view>
+    <view class="prize-card">
+      <view class="prize-item" wx:for="{{lotteryHistory}}" wx:key="time">
+        <view class="prize-icon">🎁</view>
+        <view class="prize-info">
+          <view class="prize-name">{{item.prize}}</view>
+          <view class="prize-time">{{item.time}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="logout">
+      <view class="menu-icon">🚪</view>
+      <view class="menu-text">退出登录</view>
+      <view class="menu-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="footer-section">
+    <view class="app-info">
+      <view class="app-name">iLuck年会系统</view>
+      <view class="app-version">v1.0.0</view>
+    </view>
+  </view>
+</view>

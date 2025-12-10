@@ -1,0 +1,153 @@
+App({
+  globalData: {
+    userInfo: null,
+    hasCheckin: false,
+    socketStatus: 'disconnected',
+    serverUrl: 'https://your-project.up.railway.app', // 🔧 部署后替换为你的Railway地址
+    employeeInfo: null
+  },
+
+  onLaunch() {
+    console.log('iLuck年会小程序启动');
+    
+    // 检查登录状态
+    this.checkLoginStatus();
+    
+    // 初始化Socket连接
+    this.initSocket();
+  },
+
+  onShow() {
+    // 重新连接Socket
+    if (this.globalData.socketStatus === 'disconnected') {
+      this.initSocket();
+    }
+  },
+
+  onHide() {
+    // 断开Socket连接
+    if (this.globalData.socket) {
+      this.globalData.socket.disconnect();
+      this.globalData.socketStatus = 'disconnected';
+    }
+  },
+
+  checkLoginStatus() {
+    const userInfo = wx.getStorageSync('userInfo');
+    const employeeInfo = wx.getStorageSync('employeeInfo');
+    const hasCheckin = wx.getStorageSync('hasCheckin');
+    
+    if (userInfo) {
+      this.globalData.userInfo = userInfo;
+    }
+    
+    if (employeeInfo) {
+      this.globalData.employeeInfo = employeeInfo;
+    }
+    
+    if (hasCheckin) {
+      this.globalData.hasCheckin = hasCheckin;
+    }
+  },
+
+  initSocket() {
+    try {
+      const socket = require('./utils/socket.io.js');
+      const socketInstance = socket(this.globalData.serverUrl);
+      
+      socketInstance.on('connect', () => {
+        console.log('Socket连接成功');
+        this.globalData.socketStatus = 'connected';
+        this.globalData.socket = socketInstance;
+        
+        // 注册为小程序客户端
+        socketInstance.emit('register', { 
+          type: 'miniprogram',
+          userId: this.globalData.employeeInfo?.id || 'anonymous'
+        });
+      });
+
+      socketInstance.on('disconnect', () => {
+        console.log('Socket连接断开');
+        this.globalData.socketStatus = 'disconnected';
+      });
+
+      socketInstance.on('connect_error', (error) => {
+        console.error('Socket连接错误:', error);
+        this.globalData.socketStatus = 'error';
+      });
+
+      this.globalData.socket = socketInstance;
+    } catch (error) {
+      console.error('Socket初始化失败:', error);
+      this.globalData.socketStatus = 'error';
+    }
+  },
+
+  // 获取用户信息
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      if (this.globalData.userInfo) {
+        resolve(this.globalData.userInfo);
+        return;
+      }
+
+      wx.getUserProfile({
+        desc: '用于完善会员资料',
+        success: (res) => {
+          this.globalData.userInfo = res.userInfo;
+          wx.setStorageSync('userInfo', res.userInfo);
+          resolve(res.userInfo);
+        },
+        fail: reject
+      });
+    });
+  },
+
+  // 获取员工信息
+  getEmployeeInfo() {
+    return this.globalData.employeeInfo;
+  },
+
+  // 设置员工信息
+  setEmployeeInfo(employeeInfo) {
+    this.globalData.employeeInfo = employeeInfo;
+    wx.setStorageSync('employeeInfo', employeeInfo);
+  },
+
+  // 设置签到状态
+  setCheckinStatus(status) {
+    this.globalData.hasCheckin = status;
+    wx.setStorageSync('hasCheckin', status);
+  },
+
+  // 显示错误提示
+  showError(message) {
+    wx.showToast({
+      title: message,
+      icon: 'none',
+      duration: 2000
+    });
+  },
+
+  // 显示成功提示
+  showSuccess(message) {
+    wx.showToast({
+      title: message,
+      icon: 'success',
+      duration: 2000
+    });
+  },
+
+  // 显示加载中
+  showLoading(title = '加载中...') {
+    wx.showLoading({
+      title: title
+    });
+  },
+
+  // 隐藏加载中
+  hideLoading() {
+    wx.hideLoading();
+  }
+});

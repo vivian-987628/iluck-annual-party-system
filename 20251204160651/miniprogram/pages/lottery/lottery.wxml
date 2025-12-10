@@ -1,0 +1,80 @@
+<view class="container">
+  <!-- 签到检查 -->
+  <view class="check-required" wx:if="{{!hasCheckin}}">
+    <view class="check-icon">⚠️</view>
+    <view class="check-title">需要签到</view>
+    <view class="check-desc">请先完成签到才能参与抽奖</view>
+    <button class="check-btn" bindtap="goToCheckin">去签到</button>
+  </view>
+
+  <!-- 抽奖主界面 -->
+  <view class="lottery-container" wx:else>
+    <!-- 头部 -->
+    <view class="lottery-header">
+      <view class="header-title">幸运抽奖</view>
+      <view class="header-desc">多重好礼等你来拿</view>
+    </view>
+
+    <!-- 中奖状态 -->
+    <view class="prize-status" wx:if="{{myPrize}}">
+      <view class="prize-banner">🎉 恭喜您中了{{myPrize}}！🎉</view>
+    </view>
+
+    <!-- 抽奖状态显示 -->
+    <view class="lottery-status">
+      <!-- 等待抽奖 -->
+      <view class="status-waiting" wx:if="{{lotteryStatus === 'waiting'}}">
+        <view class="waiting-icon">🎁</view>
+        <view class="waiting-title">等待抽奖开始</view>
+        <view class="waiting-desc">请关注大屏幕，抽奖即将开始</view>
+      </view>
+
+      <!-- 抽奖进行中 -->
+      <view class="status-drawing" wx:elif="{{lotteryStatus === 'drawing'}}">
+        <view class="drawing-animation">
+          <view class="dice">🎲</view>
+        </view>
+        <view class="drawing-title">抽奖进行中...</view>
+        <view class="drawing-desc">祝您好运！</view>
+      </view>
+
+      <!-- 抽奖结束 -->
+      <view class="status-finished" wx:else>
+        <view class="finished-icon">🏆</view>
+        <view class="finished-title">{{currentPrize}}抽奖结束</view>
+        <view class="finished-desc">恭喜中奖的同事！</view>
+      </view>
+    </view>
+
+    <!-- 最近中奖者 -->
+    <view class="recent-winners" wx:if="{{winners.length > 0}}">
+      <view class="winners-title">最近中奖</view>
+      <view class="winners-list">
+        <view class="winner-item" wx:for="{{winners}}" wx:key="id">
+          <view class="winner-info">
+            <view class="winner-name">{{item.name}}</view>
+            <view class="winner-dept">{{item.department}}</view>
+          </view>
+          <view class="winner-prize">{{item.prize_level}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="view-winners-btn" bindtap="viewAllWinners">查看中奖名单</button>
+      <button class="share-btn" open-type="share">分享抽奖</button>
+    </view>
+
+    <!-- 抽奖说明 -->
+    <view class="lottery-tips">
+      <view class="tips-title">抽奖说明</view>
+      <view class="tips-list">
+        <view class="tip-item">• 必须完成签到才能参与抽奖</view>
+        <view class="tip-item">• 每位员工最多只能中奖一次</view>
+        <view class="tip-item">• 中奖结果将在大屏幕实时显示</view>
+        <view class="tip-item">• 中奖者请到指定地点领取奖品</view>
+      </view>
+    </view>
+  </view>
+</view>
